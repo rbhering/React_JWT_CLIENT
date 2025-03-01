@@ -1,8 +1,10 @@
 import React, { useState, useEffect} from "react";
-import PostService from "../services/post.service";
-import AuthService from "../services/auth.service";
 import { useNavigate, Link } from "react-router-dom";
 import PaginationControlled from "./../hooks/PaginationControlled";
+import AuthService from './../services/AuthService';
+import PostService from './../services/PostService';
+
+
 const Home = () => {
   
   
@@ -18,7 +20,7 @@ const Home = () => {
 
   useEffect(() => {
 
-    PostService.getAllPrivatePosts().then(
+    PostService.getAllPosts().then(
       (response) => {
         setPrivatePosts(response.data);
       },

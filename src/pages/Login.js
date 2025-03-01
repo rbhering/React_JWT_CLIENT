@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthService from "../services/auth.service";
 import "../App.css";
 import Alert from 'react-bootstrap/Alert';
+import AuthService from './../services/AuthService';
 
 const Login = () => {
     const [email, setEmail] = useState("");

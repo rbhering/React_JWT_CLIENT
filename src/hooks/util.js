@@ -1,8 +1,5 @@
 import {useEffect} from 'react'
-
-import AuthService from "../services/auth.service"; 
-
-
+import AuthService from "../services/AuthService"; 
 
 
 const RefreshToken = () => {    

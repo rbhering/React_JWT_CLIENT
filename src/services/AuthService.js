@@ -41,11 +41,11 @@ const getCurrentUser = () => {
   return JSON.parse(localStorage.getItem("user"));
 };
 
-const authService = {
+const AuthService = {
   login,
   loginWithRefreshToken,
   logout,
   getCurrentUser,
 };
 
-export default authService;
+export default AuthService;
