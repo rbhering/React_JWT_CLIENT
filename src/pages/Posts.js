@@ -1,21 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect} from "react";
 import PostService from "../services/post.service";
 import AuthService from "../services/auth.service";
 import { useNavigate, Link } from "react-router-dom";
-import Alert from 'react-bootstrap/Alert';
-import PaginationControlled from "./../hooks/usePagination";
+import PaginationControlled from "./../hooks/PaginationControlled";
 const Home = () => {
+  
+  
   const [privatePosts, setPrivatePosts] = useState([]);
   const user = AuthService.getCurrentUser();
 
-
-
-
-
-  // setInterval()
-  //   const logOut = () => {
-  //     AuthService.logout();
-  //   };
 
   const logOut = () => {
     AuthService.logout();
@@ -38,7 +31,7 @@ const Home = () => {
           if (user != null) {
             await AuthService.loginWithRefreshToken(AuthService.getCurrentUser().refreshToken).then(
               () => {
-                navigate("/private");
+                navigate("/posts");
                 window.location.reload();
               },
               () => {
@@ -88,10 +81,6 @@ const Home = () => {
       {
         privatePosts &&
         privatePosts.map((post) =>
-          // <div key={post.id}>
-          //   <div >{post.titulo}</div>
-          //   <div>{post.text}</div>
-          // </div>
 
         <div key={post.id} className="card">
            

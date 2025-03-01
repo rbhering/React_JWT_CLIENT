@@ -2,8 +2,7 @@
 import Typography from '@mui/material/Typography';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import { useState } from 'react';
-import { Alert } from 'bootstrap';
+import { useState } from 'react'; 
 
 export default function PaginationControlled() {
   const [page, setPage] = useState(1);
