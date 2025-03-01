@@ -14,9 +14,14 @@ const getPostsPerPage = (page, limit) => {
   return axios.get(baseURL + API_URL+"/getPostPerPage", {headers: AuthHeader(), params: { page,  limit}});
 };
 
+const getPostCount = () => {
+  return axios.get(baseURL + API_URL+"/getPostCount", {headers: AuthHeader()});
+};
+
 const PostService = {
   getAllPosts,
-  getPostsPerPage
+  getPostsPerPage,
+  getPostCount
 };
 
 export default PostService;

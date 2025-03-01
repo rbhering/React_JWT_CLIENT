@@ -1,5 +1,5 @@
-import React, { useState, useEffect} from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import {  Link } from "react-router-dom";
 import AuthService from './../services/AuthService';
 import PostService from './../services/PostService';
 
@@ -9,43 +9,48 @@ import Stack from '@mui/material/Stack';
 
 
 const Home = () => {
-  
-  
+
+
   const [Posts, setPosts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pagesCount, setPagesCount] = useState();
+  const postsPorPagina = 2;
 
 
   const logOut = () => {
     AuthService.logout();
   };
 
-  const navigate = useNavigate();
 
-  // useEffect(() => {
 
-  //   PostService.getAllPosts().then(
-  //     (response) => {
-  //       setPosts(response.data);
-  //     }
-  //   );
-  // }, [navigate]);
-
-  
-  const [page, setPage] = useState(1);
 
   const handleChange = (event, value) => {
     setPage(value);
-    alert(value);
   };
 
-  useEffect (() => {
-    PostService.getPostsPerPage(page, 2).then(
+  useEffect(() => {
+    PostService.getPostsPerPage(page, postsPorPagina).then(
       (response) => {
         setPosts(response.data);
-        console.log(response.data);
       }
     );
   }, [page]);
-  
+
+  useEffect(() => {
+    PostService.getPostCount().then(
+      (response) => {
+        let count = response.data;
+        if (count % postsPorPagina === 0) {
+          count = count / postsPorPagina;
+        }
+        else {
+          count = Math.floor(count / postsPorPagina) + 1;
+        }
+        setPagesCount(count);
+      }
+    );
+  }, []);
+
 
   return (
 
@@ -53,10 +58,6 @@ const Home = () => {
 
     <div>
 
-<Stack spacing={2}>
-      <Typography>Page: {page}</Typography>
-      <Pagination count={5} page={page} onChange={handleChange} />
-    </Stack>
 
 
       <h1> Posts</h1>
@@ -71,19 +72,24 @@ const Home = () => {
         Posts &&
         Posts.map((post) =>
 
-        <div key={post.id} className="card">
-           
-          <h5 className="card-header">{post.titulo}</h5>
-          <div className="card-body">
-            <p className="card-text">{post.text}</p>
-            <Link to="/" className="btn btn-primary" onClick={logOut}> Ler Post</Link>  
+          <div key={post.id} className="card">
+
+            <h5 className="card-header">{post.titulo}</h5>
+            <div className="card-body">
+              <p className="card-text">{post.text}</p>
+              <Link to="/" className="btn btn-primary" onClick={logOut}> Ler Post</Link>
+            </div>
           </div>
-        </div>
         )
       }
-      
+
+      <Stack spacing={2}>
+        <Typography>Page: {page}</Typography>
+        <Pagination count={pagesCount} page={page} onChange={handleChange} />
+      </Stack>
+
     </div>
-   
+
   );
 };
 

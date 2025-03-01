@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Util from "./hooks/Util";
 import Login from "./pages/Login"
 import Posts from "./pages/Posts";
+import Footer from "./components/Footer";
 
 
 function App() {
@@ -22,8 +23,9 @@ function App() {
           <Route path="/posts" element={<Posts />} />
           <Route path="/" element={<Login />} />
         </Routes>
+        <Footer />
       </div>
-     
+    
     </div>
     
 
