@@ -1,15 +1,17 @@
 import React, { useState, useEffect} from "react";
 import { useNavigate, Link } from "react-router-dom";
-import PaginationControlled from "./../hooks/PaginationControlled";
 import AuthService from './../services/AuthService';
 import PostService from './../services/PostService';
+
+import Typography from '@mui/material/Typography';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 
 const Home = () => {
   
   
-  const [privatePosts, setPrivatePosts] = useState([]);
-  const user = AuthService.getCurrentUser();
+  const [Posts, setPosts] = useState([]);
 
 
   const logOut = () => {
@@ -18,61 +20,46 @@ const Home = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    PostService.getAllPosts().then(
+  //   PostService.getAllPosts().then(
+  //     (response) => {
+  //       setPosts(response.data);
+  //     }
+  //   );
+  // }, [navigate]);
+
+  
+  const [page, setPage] = useState(1);
+
+  const handleChange = (event, value) => {
+    setPage(value);
+    alert(value);
+  };
+
+  useEffect (() => {
+    PostService.getPostsPerPage(page, 2).then(
       (response) => {
-        setPrivatePosts(response.data);
-      },
-      async (error) => {
-        //alert(error)
-        console.log(error)
-        // Invalid token
-        if (error.response == null) {
-          //refresh token
-          if (user != null) {
-            await AuthService.loginWithRefreshToken(AuthService.getCurrentUser().refreshToken).then(
-              () => {
-                navigate("/posts");
-                window.location.reload();
-              },
-              () => {
-                AuthService.logout();
-                navigate("/");
-                window.location.reload();
-              }
-            );
-          }
-          else {
-            AuthService.logout();
-            navigate("/");
-            window.location.reload();
-          }
-        }
+        setPosts(response.data);
+        console.log(response.data);
       }
     );
-  }, [navigate]);
-
-  function RenderPost() {
-    useEffect(() => {
-      setInterval(() => {
-        PostService.getAllPrivatePosts().then(
-          (response) => {
-            setPrivatePosts(response.data);
-          })
-        //alert('SDF')
-      }, 1 * 30 * 1000)
-    }, [])
-
-  }
-  RenderPost();
-
+  }, [page]);
   
 
   return (
+
+
+
     <div>
-      <PaginationControlled />
-      <h1>Private Posts</h1>
+
+<Stack spacing={2}>
+      <Typography>Page: {page}</Typography>
+      <Pagination count={5} page={page} onChange={handleChange} />
+    </Stack>
+
+
+      <h1> Posts</h1>
       <div className="d-grid gap-2 mt-3">
         <Link to="/" onClick={logOut}>
           <button type="submit" className="btn btn-primary">
@@ -81,8 +68,8 @@ const Home = () => {
         </Link>
       </div>
       {
-        privatePosts &&
-        privatePosts.map((post) =>
+        Posts &&
+        Posts.map((post) =>
 
         <div key={post.id} className="card">
            
