@@ -14,7 +14,7 @@ const Home = () => {
   const [Posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
   const [pagesCount, setPagesCount] = useState();
-  const postsPorPagina = 2;
+  const POSTS_PER_PAGE = 2;
 
 
   const logOut = () => {
@@ -29,27 +29,40 @@ const Home = () => {
   };
 
   useEffect(() => {
-    PostService.getPostsPerPage(page, postsPorPagina).then(
+    PostService.getPostsPerPage(page, POSTS_PER_PAGE).then(
       (response) => {
         setPosts(response.data);
       }
     );
-  }, [page]);
-
-  useEffect(() => {
     PostService.getPostCount().then(
       (response) => {
-        let count = response.data;
-        if (count % postsPorPagina === 0) {
-          count = count / postsPorPagina;
-        }
-        else {
-          count = Math.floor(count / postsPorPagina) + 1;
-        }
-        setPagesCount(count);
+        GettPagesCount(response.data)
       }
     );
-  }, []);
+
+  }, [page]);
+
+
+    useEffect(() => {
+      PostService.getPostCount().then(
+        (response) => {
+          GettPagesCount(response.data)
+        }
+      );
+    }, []);
+  
+ function GettPagesCount(data) {
+    let count = data;
+    if (count % POSTS_PER_PAGE === 0) {
+      count = count / POSTS_PER_PAGE;
+    }
+    else {
+      count = Math.floor(count / POSTS_PER_PAGE) + 1;
+    }
+    setPagesCount(count);
+
+  }
+
 
 
   return (
